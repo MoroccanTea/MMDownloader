@@ -4,9 +4,22 @@ Soon more sources will be added.
 
 ## Requirements
 - Python 3.6 or higher
-- FFmpeg
+- A recent version of FFmpeg
 
-## Installation
+## Setup
+
+For windows users, you can install FFmpeg using winget:
+
+```sh
+winget install ffmpeg
+```
+
+For linux users, you can install FFmpeg using apt:
+```bash
+sudo apt install ffmpeg
+```
+
+Then you can install the required python packages using pip:
 
 ```bash
 git clone https://github.com/MoroccanTea/MMDownloader.git
@@ -14,12 +27,17 @@ cd MMDownloader
 pip install -r requirements.txt
 ```
 
+Copy and fill in the environment variables in the `.env` file:
+
+```sh
+cp .env.template .env
+```
+
 ## Usage
 Add the Youtube links to the `links.txt` file and run the following commands:
 
 ```bash
-python download.py
-python metadata.py
+python MMDownloader.py
 ```
 
 ## License

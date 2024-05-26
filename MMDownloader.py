@@ -1,5 +1,6 @@
 import os
 from pytube import YouTube
+import metadata
 
 def download_audio(video_url, output_path, video_number, total_videos):
     try:
@@ -22,25 +23,34 @@ def download_audio(video_url, output_path, video_number, total_videos):
         print(f"Error downloading audio for video: {video_url}")
         print(f"Error message: {str(e)}")
 
-def main():
+def print_banner():
     print("""
     __  __ __  __ _____                      _                 _           
     |  \/  |  \/  |  __ \                    | |               | |          
     | \  / | \  / | |  | | _____      ___ __ | | ___   __ _  __| | ___ _ __ 
     | |\/| | |\/| | |  | |/ _ \ \ /\ / / '_ \| |/ _ \ / _` |/ _` |/ _ \ '__|
     | |  | | |  | | |__| | (_) \ V  V /| | | | | (_) | (_| | (_| |  __/ |   
-    |_|  |_|_|  |_|_____/ \___/ \_/\_/ |_| |_|_|\___/ \__,_|\__,_|\___|_|   
+    |_|  |_|_|  |_|_____/ \___/ \_/\_/ |_| |_|_|\___/ \__,_|\__,_|\___|_| V1.0
                                                                  
                                                        by MoroccanTea
     """)
+
+def main():
+    print_banner()
     
     links_file = "links.txt"
-    output_folder = "downloaded_music"
+    downloads_folder = "downloaded_music"
+    output_folder = "finalized_music"
 
     # Create the output folder if it doesn't exist
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+    if not os.path.exists(downloads_folder):
+        os.makedirs(downloads_folder)
     
+    if not os.path.exists(links_file):
+        print("No links file found. Skipping download.")
+        metadata.add_metadata(downloads_folder, output_folder)
+        return
+
     with open(links_file, "r") as file:
         video_links = file.readlines()
     
@@ -49,7 +59,13 @@ def main():
     for index, link in enumerate(video_links, start=1):
         link = link.strip()
         if link:
-            download_audio(link, output_folder, index, total_videos)
+            download_audio(link, downloads_folder, index, total_videos)
+    
+    print("Finished downloading audio files.")
+
+    # Add metadata to the downloaded audio files
+    print("Adding metadata to downloaded audio files...")
+    metadata.add_metadata(downloads_folder, output_folder)
     
     print("Finished.")
 
